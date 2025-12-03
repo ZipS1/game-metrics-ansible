@@ -1,0 +1,9 @@
+[gitlab_runners]
+gitlab-runner1 ansible_host=1.2.3.4
+
+[services]
+telegram-bot ansible_host=5.6.7.8
+
+[edge_hosts:children]
+gitlab_runners
+services
