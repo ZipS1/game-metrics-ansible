@@ -1,0 +1,28 @@
+---
+- name: fail2ban | Install fail2ban and dependencies
+  ansible.builtin.apt:
+    package:
+      - fail2ban
+      - fail2ban-systemd
+    state: present
+
+- name: fail2ban | Create fail2ban local jail configuration directory
+  ansible.builtin.file:
+    path: /etc/fail2ban/jail.d
+    state: directory
+    mode: "0755"
+
+- name: fail2ban | Deploy fail2ban jail.local configuration
+  ansible.builtin.copy:
+    src: fail2ban.conf
+    dest: /etc/fail2ban/jail.d/fail2ban.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart fail2ban
+
+- name: fail2ban | Enable and start fail2ban service
+  ansible.builtin.systemd:
+    name: fail2ban
+    state: started
+    enabled: true

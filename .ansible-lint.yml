@@ -1,0 +1,65 @@
+---
+profile: production
+
+strict: true
+
+write_list:
+  - none
+
+skip_list: []
+
+warn_list:
+  - experimental
+
+enable_list:
+  - args
+  - empty-string-compare
+  - no-log-password
+  - no-same-owner
+  - name[prefix]
+
+var_naming_pattern: "^[a-z_][a-z0-9_]*$"
+
+loop_var_prefix: "^(__|{role}_)$"
+
+task_name_prefix: "{stem} | "
+
+max_block_depth: 5
+
+exclude_paths:
+  - .cache/
+  - test/fixtures/
+  - roles/legacy/
+  - .git/
+  - venv/
+  - .venv/
+
+kinds:
+  - playbook: "**/playbooks/*.yml"
+  - playbook: "**/playbooks/*.yaml"
+  - galaxy: "**/galaxy.yml"
+  - tasks: "**/tasks/*.yml"
+  - tasks: "**/tasks/*.yaml"
+  - vars: "**/vars/*.yml"
+  - vars: "**/vars/*.yaml"
+  - meta: "**/meta/main.yml"
+  - handlers: "**/handlers/*.yml"
+  - handlers: "**/handlers/*.yaml"
+
+offline: true
+
+verbosity: 1
+
+use_default_rules: true
+
+parseable: false
+
+quiet: false
+
+mock_modules: []
+
+mock_roles: []
+
+only_builtins_allow_collections: []
+only_builtins_allow_modules: []
+skip_action_validation: false

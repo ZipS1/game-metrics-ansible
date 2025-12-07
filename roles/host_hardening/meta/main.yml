@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Game Metrics Dev Team
-  description: harden_edge_host role
+  description: host_hardening role
   company: Game Metrics
   license: MIT
   min_ansible_version: "2.9"
