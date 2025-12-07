@@ -1,0 +1,21 @@
+---
+- name: auto_updates | Install unattended-upgrades and dependencies
+  ansible.builtin.apt:
+    name:
+      - unattended-upgrades
+      - apt-listchanges
+    state: present
+
+- name: auto_updates | Deploy periodic updates schedule
+  ansible.builtin.copy:
+    src: 20-auto-upgrades.conf
+    dest: /etc/apt/apt.conf.d/20-auto-upgrades.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: auto_updates | Enable unattended-upgrades service
+  ansible.builtin.systemd:
+    name: unattended-upgrades
+    state: started
+    enabled: true

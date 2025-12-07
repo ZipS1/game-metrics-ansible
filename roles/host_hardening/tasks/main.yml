@@ -1,0 +1,30 @@
+---
+- name: Validate platform is Debian/Ubuntu
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family == "Debian"
+    fail_msg: "This role only supports Debian/Ubuntu systems"
+    quiet: true
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Configure UFW firewall
+  ansible.builtin.import_tasks: ufw.yml
+
+- name: Configure Fail2ban
+  ansible.builtin.import_tasks: fail2ban.yml
+
+- name: Harden SSH configuration
+  ansible.builtin.import_tasks: ssh.yml
+
+- name: Apply kernel hardening
+  ansible.builtin.import_tasks: kernel.yml
+
+- name: Setup automatic security updates
+  ansible.builtin.import_tasks: auto_updates.yml
+
+- name: Configure secure logging
+  ansible.builtin.import_tasks: secure_logging.yml

@@ -1,0 +1,31 @@
+---
+- name: ufw | Install UFW
+  ansible.builtin.apt:
+    name: ufw
+    state: present
+
+- name: ufw | Set default incoming policy to DENY
+  community.general.ufw:
+    direction: incoming
+    policy: deny
+
+- name: ufw | Set default outgoing policy to ALLOW
+  community.general.ufw:
+    direction: outgoing
+    policy: allow
+
+- name: ufw | Allow SSH with rate limiting (port 22)
+  community.general.ufw:
+    rule: limit
+    port: "22"
+    proto: tcp
+    comment: "SSH with rate limiting"
+
+- name: ufw | Enable UFW logging (medium level)
+  community.general.ufw:
+    logging: "medium"
+
+- name: ufw | Enable UFW firewall
+  community.general.ufw:
+    direction: incoming
+    state: enabled

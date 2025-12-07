@@ -1,0 +1,7 @@
+---
+- name: secure_logging | Set restrictive permissions on auth log
+  ansible.builtin.file:
+    path: /var/log/auth.log
+    owner: root
+    group: root
+    mode: '0600'
