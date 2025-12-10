@@ -1,0 +1,44 @@
+---
+- name: Validate required variables
+  ansible.builtin.assert:
+    that:
+      - gitlab_runner_registration_tokens is defined
+      - gitlab_runner_type is defined
+      - gitlab_runner_type | length > 0
+    fail_msg: |
+      Required variables missing:
+      - gitlab_runner_registration_tokens: Dictionary with 'shell' and/or 'docker' tokens
+      - gitlab_runner_type: List containing 'shell' and/or 'docker'
+
+- name: Validate registration tokens for requested runner types
+  ansible.builtin.assert:
+    that:
+      - gitlab_runner_registration_tokens[item] is defined
+    fail_msg: "Registration token for '{{ item }}' runner type is required but not provided"
+  loop: "{{ gitlab_runner_type }}"
+
+- name: Validate token format (must start with glrt-)
+  ansible.builtin.assert:
+    that:
+      - gitlab_runner_registration_tokens[item] is match('^glrt-')
+    fail_msg: "Token for '{{ item }}' runner has invalid format. Expected format: glrt-xxxx"
+  loop: "{{ gitlab_runner_type }}"
+
+- name: Ensure role runs with root privileges
+  ansible.builtin.assert:
+    that:
+      - ansible_user_id | int == 0 or ansible_become | bool
+    fail_msg: "This role requires root privileges or become: true"
+
+- name: Ensure Docker installed if needed
+  ansible.builtin.include_tasks: check-docker.yml
+  when: "'docker' in gitlab_runner_type"
+
+- name: Include installation tasks
+  ansible.builtin.include_tasks: install.yml
+
+- name: Include registration tasks
+  ansible.builtin.include_tasks: register.yml
+
+- name: Include service management tasks
+  ansible.builtin.include_tasks: service.yml
