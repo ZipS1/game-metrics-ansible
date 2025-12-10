@@ -1,0 +1,21 @@
+# GitLab instance URL
+gitlab_runner_instance_url: "https://gitlab.com"
+
+# Runner base name (will be appended with runner type)
+gitlab_runner_name: "ansible_gitlab_runner"
+
+# Runner types to install (can be ['shell'], ['docker'], or ['shell', 'docker'])
+gitlab_runner_type: []
+
+# Docker executor defaults
+gitlab_runner_docker_image: "ubuntu:latest"
+gitlab_runner_docker_privileged: false
+gitlab_runner_docker_volumes: []
+gitlab_runner_docker_pull_policy: "if-not-present"
+
+# Shell executor defaults
+gitlab_runner_shell_type: "bash"
+gitlab_runner_shell_user: "ansible"
+
+# Concurrent jobs (sensible default: number of CPU cores)
+gitlab_runner_concurrent: "{{ ansible_processor_vcpus }}"

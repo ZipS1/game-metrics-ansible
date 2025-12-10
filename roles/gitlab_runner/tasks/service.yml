@@ -1,0 +1,13 @@
+---
+- name: service | Set concurrent jobs in gitlab-runner config
+  ansible.builtin.lineinfile:
+    path: /etc/gitlab-runner/config.toml
+    regexp: '^concurrent = '
+    line: 'concurrent = {{ gitlab_runner_concurrent }}'
+    state: present
+
+- name: service | Enable and restart gitlab-runner service
+  ansible.builtin.systemd:
+    name: gitlab-runner
+    enabled: true
+    state: restarted

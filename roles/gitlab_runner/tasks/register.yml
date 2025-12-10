@@ -1,0 +1,43 @@
+---
+- name: register | Register shell runner
+  ansible.builtin.shell: |
+    gitlab-runner register \
+      --non-interactive \
+      --url "{{ gitlab_runner_instance_url }}" \
+      --token "{{ gitlab_runner_registration_tokens.shell }}" \
+      --executor shell \
+      --shell "{{ gitlab_runner_shell_type }}" \
+      --name "{{ gitlab_runner_name }}_shell" \
+      --tag-list "{{ gitlab_runner_shell_tag }}" \
+      --run-untagged=false
+  when: "'shell' in gitlab_runner_type"
+  no_log: true
+  register: shell_register_result
+  changed_when:
+    - shell_register_result.rc == 0
+    - "'already exists' not in shell_register_result.stderr"
+  failed_when: docker_register_result.rc != 0 or "'already exists' not in docker_register_result.stderr"
+
+- name: register | Register docker runner
+  ansible.builtin.shell: |
+    gitlab-runner register \
+      --non-interactive \
+      --url "{{ gitlab_runner_instance_url }}" \
+      --token "{{ gitlab_runner_registration_tokens.docker }}" \
+      --executor docker \
+      --docker-image "{{ gitlab_runner_docker_image }}" \
+      --docker-privileged={{ gitlab_runner_docker_privileged | lower }} \
+      --docker-pull-policy "{{ gitlab_runner_docker_pull_policy }}" \
+      {% if gitlab_runner_docker_volumes | length > 0 %}
+      --docker-volumes "{{ gitlab_runner_docker_volumes | join(',') }}" \
+      {% endif %}
+      --name "{{ gitlab_runner_name }}_docker" \
+      --tag-list "{{ gitlab_runner_docker_tag }}" \
+      --run-untagged=false
+  when: "'docker' in gitlab_runner_type"
+  no_log: true
+  register: docker_register_result
+  changed_when:
+    - shell_register_result.rc == 0
+    - "'already exists' not in shell_register_result.stderr"
+  failed_when: docker_register_result.rc != 0 or "'already exists' not in docker_register_result.stderr"

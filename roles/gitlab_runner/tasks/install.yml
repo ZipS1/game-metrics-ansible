@@ -1,0 +1,34 @@
+---
+- name: install | Add GitLab Runner GPG key
+  ansible.builtin.apt_key:
+    url: "{{ gitlab_runner_apt_key_url }}"
+    state: present
+
+- name: install | Add GitLab Runner APT repository
+  ansible.builtin.apt_repository:
+    repo: "{{ gitlab_runner_apt_repo }}"
+    state: present
+    filename: gitlab-runner
+
+- name: install | Update APT cache
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: install | Install GitLab Runner
+  ansible.builtin.apt:
+    name: "{{ gitlab_runner_package_name }}"
+    state: present
+
+- name: install | Ensure gitlab-runner user exists
+  ansible.builtin.user:
+    name: gitlab-runner
+    state: present
+    system: true
+    shell: /bin/bash
+
+- name: install | Ensure gitlab-runner user can access Docker
+  ansible.builtin.user:
+    name: gitlab-runner
+    groups: docker
+    append: true
+  when: "'docker' in gitlab_runner_type"
