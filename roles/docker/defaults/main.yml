@@ -1,0 +1,15 @@
+---
+docker_version: "27.1"
+docker_compose_version: "2.29"
+docker_daemon_config:
+  log-driver: "json-file"
+  log-opts:
+    max-size: "10m"
+    max-file: "3"
+  registry-mirrors:
+    - "https://gcr.io"
+
+docker_install_compose: true
+
+docker_enable_service: true
+docker_start_service: true

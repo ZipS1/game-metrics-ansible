@@ -1,0 +1,13 @@
+---
+- name: Install Docker daemon
+  ansible.builtin.include_tasks: daemon.yml
+
+- name: Install Docker Compose
+  ansible.builtin.include_tasks: compose.yml
+  when: docker_install_compose | bool
+
+- name: Configure daemon
+  ansible.builtin.include_tasks: config.yml
+
+- name: Configure service
+  ansible.builtin.include_tasks: service.yml

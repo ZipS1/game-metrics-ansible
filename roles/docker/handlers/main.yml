@@ -1,0 +1,7 @@
+---
+- name: Restart Docker service
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: docker
+    state: restarted
+  listen: "restart docker"

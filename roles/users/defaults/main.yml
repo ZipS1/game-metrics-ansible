@@ -1,4 +1,4 @@
-users:
+users: # noqa: var-naming
   - name: ansible
     password: "$6$0sZscoBsb1mktEou$Ey68NIfRuZIKSZSzjSiaDnBPdcKKEDuchMcexcciI0JmG0uEywveo4U9h5NlvJSLAHuTMFsHuHA9FKmHzTGC00"
     admin_groups: all
