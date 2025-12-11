@@ -10,4 +10,4 @@
 - name: check-sshd | Fail if sshd is not running
   ansible.builtin.fail:
     msg: "sshd service is not running on {{ inventory_hostname }}"
-  when: sshd_status.state != 'started'
+  when: sshd_status.state is defined and sshd_status.state != 'started'

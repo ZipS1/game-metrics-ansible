@@ -2,7 +2,7 @@
 - name: process-users | Validate SSH key files exist
   ansible.builtin.assert:
     that:
-      - lookup('file', 'authorized_keys/' + item.name + '.pub', errors='ignore') != ''
+      - lookup('file', 'authorized_keys/' + item.name + '.pub')
     fail_msg: "SSH key file missing: authorized_keys/{{ item.name }}.pub"
   loop: "{{ users }}"
 
@@ -19,7 +19,7 @@
     - name: process-users | Create user account
       ansible.builtin.user:
         name: "{{ user_item.name }}"
-        password: "{{ user_item.password }}"
+        password: "{{ user_item.password | default(omit) }}"
         shell: /bin/bash
         createhome: true
         state: present
