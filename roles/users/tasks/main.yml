@@ -1,0 +1,9 @@
+---
+- name: Check if sshd is up and running
+  ansible.builtin.include_tasks: check-sshd.yml
+
+- name: Configure Admins group
+  ansible.builtin.include_tasks: configure-admins-group.yml
+
+- name: Create and configure users on hosts
+  ansible.builtin.include_tasks: process-users.yml

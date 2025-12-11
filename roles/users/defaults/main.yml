@@ -1,0 +1,8 @@
+users:
+  - name: ansible
+    password: "$6$0sZscoBsb1mktEou$Ey68NIfRuZIKSZSzjSiaDnBPdcKKEDuchMcexcciI0JmG0uEywveo4U9h5NlvJSLAHuTMFsHuHA9FKmHzTGC00"
+    admin_groups: all
+
+  - name: s.tsvetkov
+    password: "$6$NpI127h/ASEQ7jde$/zYp2q.8w.HBIoGTpJjXe0hmllDIUAk.NXwMzegC7K0qB.RBisRjpg1sOXEXEGLlQZM0JhCtnfIVf9sUOxxlO1"
+    admin_groups: all
