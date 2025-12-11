@@ -1,0 +1,34 @@
+---
+- name: daemon | Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: daemon | Install prerequisites for Docker
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+      - software-properties-common
+    state: present
+
+- name: daemon | Add Docker GPG key
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg
+    state: present
+
+- name: daemon | Add Docker repository
+  ansible.builtin.apt_repository:
+    repo: "deb [arch={{ ansible_architecture | replace('x86_64', 'amd64') }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable" # yamllint disable-line rule:line-length
+    state: present
+    update_cache: true
+
+- name: daemon | Install Docker
+  ansible.builtin.apt:
+    name: "docker-ce={{ docker_version }}*"
+    state: present
+  notify:
+    - restart docker

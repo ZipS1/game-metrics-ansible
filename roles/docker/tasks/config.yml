@@ -1,0 +1,17 @@
+---
+- name: config | Create /etc/docker directory
+  ansible.builtin.file:
+    path: /etc/docker
+    state: directory
+    mode: '0755'
+
+- name: config | Configure Docker daemon
+  ansible.builtin.copy:
+    content: "{{ docker_daemon_config | to_nice_json }}"
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: '0644'
+    validate: docker daemon --validate --config-file %s
+  notify:
+    - restart docker
