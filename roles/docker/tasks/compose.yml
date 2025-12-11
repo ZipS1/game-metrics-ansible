@@ -1,8 +1,20 @@
 ---
+- name: compose | Get Docker Compose release checksums
+  ansible.builtin.uri:
+    url: "https://github.com/docker/compose/releases/download/v{{ docker_compose_version }}/checksums.txt"
+    return_content: true
+  register: compose_checksums
+
+- name: compose | Extract checksum for current platform
+  ansible.builtin.set_fact:
+    docker_compose_checksum: "{{ (compose_checksums.content | regex_search('([a-f0-9]{64})\\s+docker-compose-' + ansible_system + '-' + docker_compose_machine)) | regex_replace('\\s.+', '') }}" # yamllint disable-line rule:line-length
+  vars:
+    docker_compose_machine: "{{ 'x86_64' if ansible_machine == 'x86_64' else 'aarch64' if ansible_machine == 'aarch64' else ansible_machine }}"
+
+
 - name: compose | Install Docker Compose
   ansible.builtin.get_url:
     url: "https://github.com/docker/compose/releases/download/v{{ docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ docker_compose_machine }}"
     dest: /usr/local/bin/docker-compose
     mode: '0755'
-  vars:
-    docker_compose_machine: "{{ 'x86_64' if ansible_machine == 'x86_64' else 'aarch64' if ansible_machine == 'aarch64' else ansible_machine }}"
+    checksum: "sha256:{{ docker_compose_checksum }}"
