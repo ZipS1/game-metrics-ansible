@@ -1,5 +1,8 @@
 ---
 - name: Bootstrap
+  become: true
   hosts: all
   roles:
     - host_hardening
+    - users
+    - docker
